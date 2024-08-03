@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+     {% if category %}
+              {{category.description|truncatewords:155}}
+     {% else %}
+         Welcome to SR store where you can buy everything...
+     {% endif %}
+{% endblock %}
+{% block title %}
+   {% if category %}
+              {{category.name}} - SR store
+   {% else %}
+          see new collections - SR store
+   {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+    <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
+            <p> <a href="{% url 'shopenv:allProdCat' %}"> Our Product Collections</a></p>
+        </div>
+             </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="1600px" height="800px">
+</div>
+     <br>
+<div>
+         <h1 class="text-center my_title">{{category.name}}</h1>
+         <p class="text-justify">{{category.description}}</p>
+</div>
+      {% else %}
+<div>
+<img class="my_image_padding" src="{% static 'img/banner.png' %}" alt="our products" width="1600px" height="800px">
+</div>
+<br>
+<div>
+    <h1 class="text-center">Our products collections</h1>
+    <p class="text-justify">The tools above cover a wide range of niches and potential use cases. Whether you want to generate content within your favorite tool, web browser, or an API, you’ll be able to do so with minimal effort.
+
+However, it appears that there is an entire subculture dedicated to demo content generators. While we can’t possibly list them all here, you may want to check out Awesome Ipsum – a Github repository that features a huge curated list of tools. Whether you’re looking for something serious or humorous, there are plenty of interesting options to choose from.</p>
+</div>
+     {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+            <div class="card my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4" style="width:18rem;">
+                <img src="{{product.image.url}}" class="card-img-top" alt="{{product.name}}">
+              <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+             <p>Rs.{{product.price}}</p>
+             <p class="card-text">{{product.description}}</p>
+              <a href="{{product.get_url}}" class="btn btn-primary">Show Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endfor %}
+</div>
+<div class="mx-auto">
+    {% if products.paginator.num_pages > 1 %}
+
+   <hr>
+    <div class="=text-center">
+        {% for pg in products.page.paginator.page_range %}
+        <a href="page={{pg}}" class="btn btn-primary btn-sm {% if products.number == pg %} active {% endif %}">{pg}}></a>
+        {% endfor %}
+    </div>
+     {% endif %}
+</div>
+
+
+    {% endblock %}
+
